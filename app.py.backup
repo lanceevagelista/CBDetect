@@ -1,0 +1,65 @@
+from flask import Flask, render_template, request
+#from cyberbullying_detection import load_all_hate_words, detect_cyberbullying
+from apify_client import ApifyClient
+import requests
+
+app = Flask(__name__)
+
+# @app.route('/')
+# def home():
+#     return "hey"
+
+
+# app.run(port=8000)
+
+data = {
+    "directUrls": ["https://www.instagram.com/p/C1ewnSwvyjg/?img_index=1"]
+}
+
+apify_token = 'apify_api_8H2Jurbkg5yLS60YB8q4jdoKjzOG2G0OuBoS'
+apify_client = ApifyClient(apify_token)
+actor_id = 'apify/instagram-comment-scraper'
+
+url='https://api.apify.com/v2/acts/apify~instagram-comment-scraper/run-sync-get-dataset-items?token=' + apify_token
+
+print(url)
+
+response = requests.post(url, json=data)
+    
+print(response.json())
+
+# Provide the paths to your hate words datasets
+# hate_words_file_paths = ['profanity_en.csv', 'profanity_fil.csv']
+# hate_words = load_all_hate_words(hate_words_file_paths)
+
+# Replace 'your-actor-id' with the actual ID of your Instagram comment scraper actor
+# actor_id = 'https://api.apify.com/v2/acts/apify~instagram-comment-scraper/runs?token=apify_api_8H2Jurbkg5yLS60YB8q4jdoKjzOG2G0OuBoS'
+# apify_token = 'apify_api_8H2Jurbkg5yLS60YB8q4jdoKjzOG2G0OuBoS'
+# apify_client = ApifyClient(apify_token)
+
+# @app.route('/', methods=['GET', 'POST'])
+# def index():
+#     result = None
+
+#     if request.method == 'POST':
+#         text_input = request.form.get('text_input', '')  # Use .get() to avoid KeyError
+#         if text_input:
+#             # Define input data
+#             input_data = {
+#                 "instagramLink": text_input,
+#             }
+
+#             # Run the Instagram comment scraper actor
+#             run = apify_client.actor(actor_id).call('start', input=input_data)
+#             run.wait_for_finish()
+
+#             # Retrieve the output data
+#             output_data = run.fetch_output()
+
+#             # Process the output data (you might need to adapt this based on the actual output structure)
+#             result = detect_cyberbullying(output_data.get('comments', ''), hate_words)
+
+#     return render_template('index.html', result=result)
+
+# if __name__ == '__main__':
+#     app.run(debug=True)
